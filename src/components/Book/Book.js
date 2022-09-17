@@ -1,8 +1,10 @@
 import React from 'react';
+import { useContext } from 'react';
 import { Link, useParams } from 'react-router-dom';
 
 const Book = () => {
     const {bedType} = useParams();
+    // const [loggedInUser,setLoggedInuser] = useContext(UserContext)
     return (
         <div style={{textAlign: 'center'}}>
             <h1>Let's book a {bedType} Room.</h1>
