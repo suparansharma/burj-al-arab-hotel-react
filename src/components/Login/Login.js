@@ -12,6 +12,8 @@ import {
     signInWithEmailAndPassword,
     updateProfile,FacebookAuthProvider
 } from "firebase/auth";
+import { UserContext } from '../../App';
+import { useHistory, useLocation } from 'react-router-dom';
 // import * as firebase from 'firebase/app'
 
 const Login = () => {
@@ -24,6 +26,11 @@ const Login = () => {
       password: "",
       photo: "",
     });
+
+    const [loggedInUser,setLoggedInUser] = useContext(UserContext);
+    const history = useHistory();
+    const location = useLocation();
+    let { from } = location.state || { from: { pathname: "/" } };
     const app = initializeApp(firebaseConfig);
     const auth = getAuth(app);
     const Googleprovider = new GoogleAuthProvider();
@@ -39,6 +46,8 @@ const Login = () => {
             photo: photoURL,
           };
           setUser(signedInUser);
+          setLoggedInUser(signedInUser);
+          history.replace(from);
           console.log(displayName, email, photoURL);
   
           // const credential = GoogleAuthProvider.credentialFromResult(result);
@@ -124,12 +133,15 @@ const Login = () => {
       newUserInfo.error="";
       newUserInfo.success=true;
       setUser(newUserInfo);
+      setLoggedInUser(newUserInfo);
+      history.replace(from);
     })
     .catch((error) => {
       const newUserInfo = {...user};
       newUserInfo.error=error.message;
       newUserInfo.success = false;
       setUser(newUserInfo);
+
     });
       }
   
